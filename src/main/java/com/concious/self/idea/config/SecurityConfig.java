@@ -17,12 +17,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // disable this if you want to use it in postman
                 .csrf().disable()
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
+                // To get rid of the http session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
