@@ -30,6 +30,7 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
