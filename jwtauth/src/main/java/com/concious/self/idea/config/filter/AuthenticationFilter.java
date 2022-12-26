@@ -1,6 +1,7 @@
 package com.concious.self.idea.config.filter;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,7 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.concious.self.idea.jpa.model.User;
+import com.concious.self.idea.utils.SecurityConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
@@ -41,7 +45,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
         System.out.println("Authentication Sucessful");
-        response.getWriter().write("User Autenticated Sucessfully");
+        String token = JWT.create().withSubject(authResult.getName())
+                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRY))
+                .sign(Algorithm.HMAC512(SecurityConstants.SECRET_KEY));
+        response.getWriter().write(token);
 
     }
 
