@@ -5,13 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.concious.self.idea.config.filter.AuthenticationFilter;
+import com.concious.self.idea.config.filter.customfilter.ExceptionHandlerFilter;
 import com.concious.self.idea.utils.SecurityConstants;
 
 @Configuration
@@ -27,7 +25,8 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                // To get rid of the http session
+                .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
+                .addFilter(new AuthenticationFilter())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
@@ -35,14 +34,5 @@ public class SecurityConfig {
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("admin")
-                .roles("ADMIN")
-                .password(bCryptPasswordEncoder().encode("admin")).build();
-        return new InMemoryUserDetailsManager(user);
     }
 }
