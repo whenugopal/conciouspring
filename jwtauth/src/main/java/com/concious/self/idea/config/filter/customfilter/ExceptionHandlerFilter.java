@@ -21,6 +21,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (EntityNotFoundException e) {
             System.out.println("User Not Found Exception");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("User Not Found in our Base");
         } catch (RuntimeException e) {
             System.out.println("Caught Exception in handler");

@@ -49,6 +49,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
         System.out.println("Unsucessful Authentication");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("User Not Autenticated");
     }
 }
