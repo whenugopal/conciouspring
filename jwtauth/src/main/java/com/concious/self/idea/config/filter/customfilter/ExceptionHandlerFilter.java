@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.concious.self.idea.exception.EntityNotFoundException;
+
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
@@ -17,6 +19,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             System.out.println("inside this exception filter");
             filterChain.doFilter(request, response);
+        } catch (EntityNotFoundException e) {
+            System.out.println("User Not Found Exception");
+            response.getWriter().write("User Not Found in our Base");
         } catch (RuntimeException e) {
             System.out.println("Caught Exception in handler");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

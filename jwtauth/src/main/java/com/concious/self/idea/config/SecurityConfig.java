@@ -9,14 +9,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.concious.self.idea.config.filter.AuthenticationFilter;
+import com.concious.self.idea.config.filter.CustomAuthenticationManager;
 import com.concious.self.idea.config.filter.customfilter.ExceptionHandlerFilter;
 import com.concious.self.idea.utils.SecurityConstants;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Configuration
 public class SecurityConfig {
 
+    private final CustomAuthenticationManager customAuthenticationManager;
+
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(customAuthenticationManager);
+        authenticationFilter.setFilterProcessesUrl("/authenticate");
         http
                 // disable this if you want to use it in postman
                 .csrf().disable()
@@ -26,13 +34,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
-                .addFilter(new AuthenticationFilter())
+                .addFilter(new AuthenticationFilter(customAuthenticationManager))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
 
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.concious.self.idea.exception.EntityNotFoundException;
+import com.concious.self.idea.exception.NotFoundException;
 import com.concious.self.idea.jpa.model.User;
 import com.concious.self.idea.repository.UserStore;
 
@@ -20,7 +22,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String userName) {
         Optional<User> entity = userStore.findByUserName(userName);
-        return entity.get();
+        if (entity.isPresent()) {
+            return entity.get();
+        }
+        throw new EntityNotFoundException(userName, NotFoundException.class);
     }
 
     @Override
