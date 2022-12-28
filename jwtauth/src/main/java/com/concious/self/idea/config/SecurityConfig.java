@@ -10,7 +10,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.concious.self.idea.config.filter.AuthenticationFilter;
 import com.concious.self.idea.config.filter.CustomAuthenticationManager;
-import com.concious.self.idea.config.filter.customfilter.ExceptionHandlerFilter;
+import com.concious.self.idea.config.filter.ExceptionHandlerFilter;
+import com.concious.self.idea.config.filter.JWTAuthenticationFilter;
 import com.concious.self.idea.utils.SecurityConstants;
 
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(new AuthenticationFilter(customAuthenticationManager))
+                .addFilterAfter(new JWTAuthenticationFilter(), AuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }

@@ -9,4 +9,6 @@ import com.concious.self.idea.jpa.model.User;
 public interface UserStore extends CrudRepository<User, Long> {
 
     Optional<User> findByUserName(String userName);
+
+    Optional<User> findById(Long id);
 }

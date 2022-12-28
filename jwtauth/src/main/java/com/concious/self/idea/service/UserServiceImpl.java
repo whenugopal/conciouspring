@@ -34,4 +34,13 @@ public class UserServiceImpl implements UserService {
         return userStore.save(user);
     }
 
+    @Override
+    public User findByUserId(Long id) {
+        Optional<User> entity = userStore.findById(id);
+        if (entity.isPresent()) {
+            return entity.get();
+        }
+        throw new EntityNotFoundException(String.valueOf(id), NotFoundException.class);
+    }
+
 }

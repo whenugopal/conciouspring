@@ -1,4 +1,4 @@
-package com.concious.self.idea.config.filter.customfilter;
+package com.concious.self.idea.config.filter;
 
 import java.io.IOException;
 
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.concious.self.idea.exception.EntityNotFoundException;
 
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
@@ -23,6 +24,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             System.out.println("User Not Found Exception");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write("User Not Found in our Base");
+        } catch (JWTVerificationException e) {
+            System.out.println("Verification dead");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Verification is dead");
         } catch (RuntimeException e) {
             System.out.println("Caught Exception in handler");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
