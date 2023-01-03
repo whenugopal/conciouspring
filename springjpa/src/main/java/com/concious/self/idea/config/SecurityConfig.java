@@ -22,6 +22,10 @@ public class SecurityConfig {
 
     private final CustomAuthenticationManager customAuthenticationManager;
 
+    private static final String[] unSecured = new String[] { SecurityConstants.REGISTER_PATH, "/addStudent",
+            "/student/**/addGrade",
+            "/grade/student/**" };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(customAuthenticationManager);
@@ -30,8 +34,7 @@ public class SecurityConfig {
                 // disable this if you want to use it in postman
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,
-                        new String[] { SecurityConstants.REGISTER_PATH, "/addStudent", "/student/**/addGrade" })
+                .antMatchers(unSecured)
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
