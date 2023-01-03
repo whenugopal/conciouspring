@@ -1,0 +1,5 @@
+name: jwtauth
+packages:
+  - path: com.concious.self.idea
+language: java
+appmap_dir: build/appmap
