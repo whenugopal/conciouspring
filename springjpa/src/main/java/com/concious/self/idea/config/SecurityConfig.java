@@ -30,7 +30,8 @@ public class SecurityConfig {
                 // disable this if you want to use it in postman
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH)
+                .antMatchers(HttpMethod.POST,
+                        new String[] { SecurityConstants.REGISTER_PATH, "/addStudent", "/student/**/addGrade" })
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
